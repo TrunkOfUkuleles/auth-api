@@ -7,14 +7,14 @@ const morgan = require('morgan');
 
 const errorHandler = require('./errors/500.js');
 const notHere = require('./errors/404.js');
-// const routeV1 = require('./basicRoutes.js')
+const routeV1 = require('./auth/v1.js')
 const routeV2 = require('./auth/routes.js')
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// app.use('/api/v1', routeV1);
+app.use('/api/v1', routeV1);
 app.use(routeV2);
 
 

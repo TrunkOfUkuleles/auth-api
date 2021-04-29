@@ -30,7 +30,9 @@ userSchema.virtual('capabilities').get(function () {
   });  
 
 userSchema.pre('save', async function(){
+  if (this.isModified('password')) {
     this.password = await bcrypt.hash(this.password, 10);
+  }
 })
 
 userSchema.statics.basicAuth = async function (username, password){
