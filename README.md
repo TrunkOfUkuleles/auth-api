@@ -10,6 +10,7 @@
 
 - [github](https://github.com/TrunkOfUkuleles/auth-api)
 - [Testing](https://github.com/TrunkOfUkuleles/auth-api/actions) 
+- [Heroku](https://julien-basic-auth.herokuapp.com/)
 
 ### Setup
 
