@@ -14,7 +14,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/api/v1', routeV1);
+app.get('/api/v1', routeV1);
 app.use(routeV2);
 
 
