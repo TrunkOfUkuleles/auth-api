@@ -1,38 +1,39 @@
 'use strict';
 
-const fs = require('fs');
+// const fs = require('fs');
 const express = require('express');
-const Collection = require('../models/data-collection.js');
-
+// const Collection = require('../models/data-collection.js');
+const basicAuth = require('./middleware/basicAuth.js')
+const bearerAuth = require('./middleware/bearerAuth.js')
 const v2 = express.Router();
+const Users = require('./models/user.js')
+// const models = new Map();
 
-const models = new Map();
 
 
+// v2.param('model', (req, res, next) => {
+//     const modelName = req.params.model;
+//     if (models.has(modelName)) {
+//       req.model = models.get(modelName);
+//       next();
+//     } else {
+//       const fileName = `${__dirname}/../models/${modelName}/model.js`; //this is wild
+//       if (fs.existsSync(fileName)) {
+//         const model = require(fileName);
+//         models.set(modelName, new Collection(model));
+//         req.model = models.get(modelName);
+//         next();
+//       }
+//       else {
+//         next("Invalid Model");
+//       }
+//     }
+//   });
 
-v2.param('model', (req, res, next) => {
-    const modelName = req.params.model;
-    if (models.has(modelName)) {
-      req.model = models.get(modelName);
-      next();
-    } else {
-      const fileName = `${__dirname}/../models/${modelName}/model.js`; //this is wild
-      if (fs.existsSync(fileName)) {
-        const model = require(fileName);
-        models.set(modelName, new Collection(model));
-        req.model = models.get(modelName);
-        next();
-      }
-      else {
-        next("Invalid Model");
-      }
-    }
-  });
-
-  v2.post('/:model/signup', handleSignUp);
-  v2.post('/:model/signin/', handleSignIn);
-  v2.get('/:model/users', getUsers);
-  v2.get('/:model/secret', getSecret);
+  v2.post('/signup', handleSignUp);
+  v2.post('/signin/', basicAuth, handleSignIn);
+  v2.get('/users', bearerAuth, getUsers);
+  v2.get('/secret', bearerAuth, getSecret);
 
 
 async function handleSignUp(req, res) {
@@ -51,9 +52,9 @@ async function handleSignIn(req, res) {
 }
 
 async function getUsers(req, res) {
-  let obj = req.body;
-  let newRecord = await req.model.create(obj);
-  res.status(201).json(newRecord);
+    const users = await Users.find({});
+    const list = users.map(user => user.username);
+  res.status(201).json(list);
 }
 
 async function getSecret(req, res) {
